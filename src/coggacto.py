@@ -1,4 +1,4 @@
-import discord, random
+import random
 import requests
 from discord.ext import commands
 from deep_translator import GoogleTranslator

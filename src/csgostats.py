@@ -37,21 +37,21 @@ class CogValve(commands.Cog, description='Comandos para pegar dados de jogos da 
         self.bot = bot
 
     @commands.command(brief='Comando pra você poder ver os dados de jogo de um perfil da steam.', 
-    description='Você deve usar o comando da seguinte maneira: $csgo (base/kills) steamurl, qualquer outra coisa que não for um url da steam, não vai funcionar')
+    description='Você deve usar o comando da seguinte maneira: $csgo (base/kills/mapas) steamurl, qualquer outra coisa que não for um url da steam, não vai funcionar')
     async def csgo(self, ctx, tipo, url):
-        foto = pegaImagem(url)
-        if 'id' in url:
-            steamid = []
-            steam1 = url.replace('https://steamcommunity.com/id/', '')
-            steam = steam1.replace('/', '')
-            steamid_url = requests.get(f'http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=C9BDBB4151F136083506A1572ABD8B9B&vanityurl={steam}').json()
-            steamid = steamid_url['response']['steamid']
-        if 'profiles' in url:
-            steam = url.replace('https://steamcommunity.com/profiles/', '')
-            steamid = steam.replace('/', '')
-        loop = 0
-        valores = {}
         try:
+            foto = pegaImagem(url)
+            if 'id' in url:
+                steamid = []
+                steam1 = url.replace('https://steamcommunity.com/id/', '')
+                steam = steam1.replace('/', '')
+                steamid_url = requests.get(f'http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=C9BDBB4151F136083506A1572ABD8B9B&vanityurl={steam}').json()
+                steamid = steamid_url['response']['steamid']
+            if 'profiles' in url:
+                steam = url.replace('https://steamcommunity.com/profiles/', '')
+                steamid = steam.replace('/', '')
+            loop = 0
+            valores = {}
             csgo = requests.get(f"http://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/?appid=730&key=C9BDBB4151F136083506A1572ABD8B9B&steamid={steamid}").json()
             csgo_stats = csgo["playerstats"]["stats"]
             while loop < int(len(status)):
@@ -59,7 +59,7 @@ class CogValve(commands.Cog, description='Comandos para pegar dados de jogos da 
                     if stat["name"] == status[loop]:
                         valores[stat['name']]=stat['value']
                 loop += 1
-        except KeyError:
+        except:
             await ctx.send('ERRO! SteamID inválida, ou o usuário está como perfil PRIVADO (bem gay).')
         if tipo == 'base':
             embed=discord.Embed(title=f"Status de Counter-Strike:Global Offensive do usuário **{steam}**", 
