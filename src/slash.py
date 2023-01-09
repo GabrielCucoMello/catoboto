@@ -1,7 +1,9 @@
 import random
 import requests
+import discord
 from discord.ext import commands
 from deep_translator import GoogleTranslator
+from discord.utils import get
 
 class CogSlash(commands.Cog, description='Comandos de barra para o bot.'):
     def __init__(self, bot):

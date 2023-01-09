@@ -41,6 +41,8 @@ class CogValve(commands.Cog, description='Comandos para pegar dados de jogos da 
     async def csgo(self, ctx, tipo, url):
         try:
             foto = pegaImagem(url)
+            if 'www.' in url:
+                url = url.replace('www.', '')
             if 'id' in url:
                 steamid = []
                 steam1 = url.replace('https://steamcommunity.com/id/', '')
@@ -60,7 +62,7 @@ class CogValve(commands.Cog, description='Comandos para pegar dados de jogos da 
                         valores[stat['name']]=stat['value']
                 loop += 1
         except:
-            await ctx.send('ERRO! SteamID inválida, ou o usuário está como perfil PRIVADO (bem gay).')
+            await ctx.reply('ERRO! SteamID inválida, ou o usuário está como perfil PRIVADO (bem gay).')
         if tipo == 'base':
             embed=discord.Embed(title=f"Status de Counter-Strike:Global Offensive do usuário **{steam}**", 
             description="Aqui você pode ver os stats BASE do jogador requerido.",
@@ -134,4 +136,4 @@ class CogValve(commands.Cog, description='Comandos para pegar dados de jogos da 
             embed.add_field(name="Rounds Train", value=f"{valores.get('total_rounds_map_de_train', 0)}", inline=True)
             embed.add_field(name="Vitórias Train", value=f"{valores.get('total_wins_map_de_train', 0)}", inline=True)
             embed.add_field(name="Derrotas Train", value=f"{valores.get('total_rounds_map_de_train', 0) - valores.get('total_wins_map_de_train', 0)}", inline=True)
-        await ctx.send(embed=embed)
+        await ctx.reply(embed=embed)
