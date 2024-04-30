@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 from typing import (
     Any,
-    Iterator,
-    overload,
     TypeVar,
     Protocol,
+    runtime_checkable,
 )
 
 __all__ = ["_NestedSequence"]
@@ -15,6 +15,7 @@ __all__ = ["_NestedSequence"]
 _T_co = TypeVar("_T_co", covariant=True)
 
 
+@runtime_checkable
 class _NestedSequence(Protocol[_T_co]):
     """A protocol for representing nested sequences.
 
@@ -36,9 +37,9 @@ class _NestedSequence(Protocol[_T_co]):
 
         >>> from typing import TYPE_CHECKING
         >>> import numpy as np
-        >>> from numpy._typing import _NestedSequnce
+        >>> from numpy._typing import _NestedSequence
 
-        >>> def get_dtype(seq: _NestedSequnce[float]) -> np.dtype[np.float64]:
+        >>> def get_dtype(seq: _NestedSequence[float]) -> np.dtype[np.float64]:
         ...     return np.asarray(seq).dtype
 
         >>> a = get_dtype([1.0])
@@ -60,12 +61,7 @@ class _NestedSequence(Protocol[_T_co]):
         """Implement ``len(self)``."""
         raise NotImplementedError
 
-    @overload
-    def __getitem__(self, index: int, /) -> _T_co | _NestedSequence[_T_co]: ...
-    @overload
-    def __getitem__(self, index: slice, /) -> _NestedSequence[_T_co]: ...
-
-    def __getitem__(self, index, /):
+    def __getitem__(self, index: int, /) -> _T_co | _NestedSequence[_T_co]:
         """Implement ``self[x]``."""
         raise NotImplementedError
 

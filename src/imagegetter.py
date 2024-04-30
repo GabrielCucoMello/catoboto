@@ -1,7 +1,6 @@
 import requests, discord
 from discord.ext import commands
 from deep_translator import GoogleTranslator
-from serpapi import GoogleSearch
 
 class CogImage(commands.Cog, description='Comandos para gerar imagens diversas.'):
     def __init__(self, bot):
